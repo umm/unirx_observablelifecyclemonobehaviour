@@ -1,10 +1,10 @@
 {
-  "name": "@umm/unirx_observablelifetimemonobehaviour",
+  "name": "@umm/unirx_observablelifecyclemonobehaviour",
   "version": "1.0.0",
   "description": "Provide UniRx wrapper for MonoBehaviour.Awake(), MonoBehaviour.Start()",
-  "homepage": "https://github.com/umm-projects/unirx_observablelifetimemonobehaviour",
+  "homepage": "https://github.com/umm-projects/unirx_observablelifecyclemonobehaviour",
   "bugs": {
-    "url": "https://github.com/umm-projects/unirx_observablelifetimemonobehaviour/issues"
+    "url": "https://github.com/umm-projects/unirx_observablelifecyclemonobehaviour/issues"
   },
   "scripts": {
     "umm:init": "node ./scripts/umm/init.js",
@@ -19,7 +19,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git@github.com:umm-projects/unirx_observablelifetimemonobehaviour"
+    "url": "git@github.com:umm-projects/unirx_observablelifecyclemonobehaviour"
   },
   "files": [
     "Assets",
