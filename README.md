@@ -1,4 +1,4 @@
-# unirx_observablelifetimemonobehaviour
+# unirx_observablelifecyclemonobehaviour
 
 * Awake(), Start() の実行完了を待つためのストリームを提供します。
 
@@ -10,15 +10,15 @@
 ## Install
 
 ```shell
-npm install github:umm-projects/unirx_observablelifetimemonobehaviour
+npm install github:umm-projects/unirx_observablelifecyclemonobehaviour
 ```
 
 ## Usage
 
-### `ObservableLifetimeMonoBehaviour` を継承
+### `ObservableLifecycleMonoBehaviour` を継承
 
 * 実行順待ちを行うためのクラスを継承します。
-* 待つ側も待たれる側も `ObservableLifetimeMonoBehaviour` を継承します。
+* 待つ側も待たれる側も `ObservableLifecycleMonoBehaviour` を継承します。
 
 ### 属性をプロパティに付与
 
@@ -35,7 +35,7 @@ npm install github:umm-projects/unirx_observablelifetimemonobehaviour
 ### サンプルコード
 
 ```csharp
-public class Sample : ObservableLifetimeMonoBehaviour {
+public class Sample : ObservableLifecycleMonoBehaviour {
 
     [SerializeField]
     private FirstAwake firstAwake;
