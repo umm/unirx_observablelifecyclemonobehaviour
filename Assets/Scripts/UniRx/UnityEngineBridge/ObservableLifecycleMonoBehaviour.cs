@@ -2,26 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+// ReSharper disable ArrangeAccessorOwnerBody
 
 // ReSharper disable UnusedMember.Global
 // ReSharper disable ClassNeverInstantiated.Global
 // ReSharper disable VirtualMemberNeverOverridden.Global
 
 namespace UniRx {
-
-    public class ObservableLifecycleMonoBehaviourAttribute : Attribute {
-
-    }
-
-    [AttributeUsage(AttributeTargets.Property)]
-    public class ObservableAwakeMonoBehaviourAttribute : ObservableLifecycleMonoBehaviourAttribute {
-
-    }
-
-    [AttributeUsage(AttributeTargets.Property)]
-    public class ObservableStartMonoBehaviourAttribute : ObservableLifecycleMonoBehaviourAttribute {
-
-    }
 
     public interface IObservableLifecycleMonoBehaviour {
 
@@ -69,6 +56,42 @@ namespace UniRx {
             }
         }
 
+        [SerializeField]
+        private List<GameObject> preAwakeGameObjectList = new List<GameObject>();
+
+        private List<GameObject> PreAwakeGameObjectList {
+            get {
+                return this.preAwakeGameObjectList;
+            }
+        }
+
+        [SerializeField]
+        private List<ObservableLifecycleMonoBehaviour> preAwakeComponentList = new List<ObservableLifecycleMonoBehaviour>();
+
+        private List<ObservableLifecycleMonoBehaviour> PreAwakeComponentList {
+            get {
+                return this.preAwakeComponentList;
+            }
+        }
+
+        [SerializeField]
+        private List<GameObject> preStartGameObjectList = new List<GameObject>();
+
+        private List<GameObject> PreStartGameObjectList {
+            get {
+                return this.preStartGameObjectList;
+            }
+        }
+
+        [SerializeField]
+        private List<ObservableLifecycleMonoBehaviour> preStartComponentList = new List<ObservableLifecycleMonoBehaviour>();
+
+        private List<ObservableLifecycleMonoBehaviour> PreStartComponentList {
+            get {
+                return this.preStartComponentList;
+            }
+        }
+
         private readonly List<IObservable<Unit>> onAwakeObservableList = new List<IObservable<Unit>>();
 
         private List<IObservable<Unit>> OnAwakeObservableList {
@@ -94,10 +117,10 @@ namespace UniRx {
         }
 
         protected virtual void Awake() {
-            // 自身の Interface から先読みする MonoBehaviour を決定する
-            this.PrepareObservableList<IObservableAwakeMonoBehaviour, ObservableAwakeMonoBehaviourAttribute>(
-                x => this.OnAwakeObservableList.Add(x.OnAwakeAsObservable())
-            );
+            // 登録済みの GameObject にアタッチされている全ての ObservableLifecycleMonoBehaviour Component から登録
+            this.PreAwakeGameObjectList.SelectMany(x => x.GetComponents<ObservableLifecycleMonoBehaviour>()).ToList().ForEach(x => this.OnAwakeObservableList.Add(x.OnAwakeAsObservable()));
+            // 登録済みの ObservableLifecycleMonoBehaviour Component から登録
+            this.PreAwakeComponentList.ForEach(x => this.OnAwakeObservableList.Add(x.OnAwakeAsObservable()));
             // 全ての先読み MonoBehaviour の Awake() 呼び出しが完了したら処理を行う
             this.OnAwakeObservableList
                 .WhenAll()
@@ -111,10 +134,10 @@ namespace UniRx {
         }
 
         protected virtual void Start() {
-            // 自身の Interface から先読みする MonoBehaviour を決定する
-            this.PrepareObservableList<IObservableStartMonoBehaviour, ObservableStartMonoBehaviourAttribute>(
-                x => this.OnStartObservableList.Add(x.OnStartAsObservable())
-            );
+           // 登録済みの GameObject にアタッチされている全ての ObservableLifecycleMonoBehaviour Component から登録
+            this.PreStartGameObjectList.SelectMany(x => x.GetComponents<ObservableLifecycleMonoBehaviour>()).ToList().ForEach(x => this.OnStartObservableList.Add(x.OnStartAsObservable()));
+            // 登録済みの ObservableLifecycleMonoBehaviour Component から登録
+            this.PreStartComponentList.ForEach(x => this.OnStartObservableList.Add(x.OnStartAsObservable()));
             // 全ての先読み MonoBehaviour の Start() 呼び出しが完了したら処理を行う
             this.OnStartObservableList
                 .WhenAll()
@@ -138,33 +161,6 @@ namespace UniRx {
 
         protected virtual void OnStart() {
             // Do nothing.
-        }
-
-        private void PrepareObservableList<TInterface, TAttribute>(Action<TInterface> callback)
-            where TInterface : IObservableLifecycleMonoBehaviour
-            where TAttribute : ObservableLifecycleMonoBehaviourAttribute {
-            // やや重ための Reflection が走るが初回だけなので妥協する
-            // Interface の縛りを入れても良かったが、それはそれで重いので可読性を優先した
-            this.GetType()
-                // ViewController が実装している全ての Interface を取得
-                .GetInterfaces()
-                // 各 Interface の Property のうち、[ObservableLifecycleMonoBehaviour] Attribute が付いたプロパティの一覧に変換
-                .SelectMany(
-                    // Interface の全 Property を取得
-                    x => x.GetProperties()
-                        // 絞り込み
-                        .Where(
-                            // [ObservableLifecycleMonoBehaviour] Attribute が付いているかどうかを判定
-                            y => Attribute
-                                .GetCustomAttributes(y, typeof(TAttribute))
-                                .Any()
-                        )
-                )
-                // .NET 3.5 をベースにするので GetValue() は第二引数を明示する
-                .Where(x => x.GetValue(this, new object[] {}) is TInterface)
-                .ToList()
-                // 条件に合致した Property の値を取得し、 OnAwakeAsObservable() なストリームをリストに追加
-                .ForEach(x => callback((TInterface)x.GetValue(this, new object[] {})));
         }
 
     }
