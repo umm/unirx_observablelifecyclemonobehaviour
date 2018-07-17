@@ -5,12 +5,12 @@
 ## Requirement
 
 * Unity 2017.1
-* [@umm/unirx](https://github.com/umm-projects/unirx)
+* [@umm/unirx](https://github.com/umm/unirx)
 
 ## Install
 
 ```shell
-npm install github:umm-projects/unirx_observablelifecyclemonobehaviour
+npm install github:umm/unirx_observablelifecyclemonobehaviour
 ```
 
 ## Usage
