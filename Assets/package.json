@@ -1,0 +1,22 @@
+{
+  "name": "dev.upm-packages.unirx-observablelifecyclemonobehaviour",
+  "displayName": "UniRx ObservableLifecycleMonoBehaviour",
+  "version": "1.3.0",
+  "unity": "2019.3",
+  "description": "",
+  "author": {
+    "name": "Tetsuya Mori",
+    "url": "https://me.monry.dev/",
+    "email": "monry84@gmail.com"
+  },
+  "license": "MIT",
+  "keywords": [],
+  "category": "",
+  "dependencies": {
+    "jp.cysharp.unirx": "7.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/umm/unirx_observablelifecyclemonobehaviour"
+  }
+}
