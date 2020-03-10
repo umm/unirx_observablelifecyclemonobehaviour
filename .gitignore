@@ -5,6 +5,7 @@
 /[Oo]bj/
 /[Ll]ibrary/
 /[Bb]uild/
+/[Ll]ogs/
 /UnityGenerated/
 # Library should not freeze version, it should be written in README.
 /ProjectSettings/ProjectVersion.txt
@@ -37,6 +38,8 @@
 # ======================= #
 /node_modules/
 /Assets/Modules*
+/package-lock.json
+/yarn.lock
 
 # ============ #
 # OS generated #
@@ -58,5 +61,4 @@ Thumbs.db
 # ====== #
 # Custom #
 # ====== #
-/package-lock.json
-/yarn.lock
+
